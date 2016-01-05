@@ -20,13 +20,14 @@ var HomerReactScroller = React.createClass({
 		this._scroll(e);
 	},
 	_scroll: function (e) {
+		e.stopPropagation();
 		var upDown = this.props.scrollDirection === 'y';
 		var margin = upDown ? 'marginTop' : 'marginLeft';
 		var viewport = e.currentTarget;
 		var target = viewport.querySelector(this.props.scrollSelector);
 		if (target) {
-			var maxScroll = upDown ? (target.offsetHeight - viewport.offsetHeight) + 100 : (target.offsetWidth - viewport.offsetWidth) * 2;
-			var currentScroll = parseInt(target.style[margin], 10) || 0;;
+			var maxScroll = upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
+			var currentScroll = parseInt(target.style[margin], 10) || 0;
 			var newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
 			target.style[margin] = (Math.abs(newScroll) <= maxScroll ? newScroll : Math.min(-maxScroll, 0)) + 'px';
 		}

@@ -1,14 +1,16 @@
 'use strict';
 
+var path = require('path');
+var webpack = require('webpack');
+
 module.exports = {
-	entry: './src/index.js',
+	entry: './demo/index.jsx',
+	plugins: [new webpack.HotModuleReplacementPlugin()],
 	watch: true,
 	keepalive: true,
 	devtool: "#inline-source-map",
 	output: {
-		filename: 'index.js',
-		path: './dist',
-		publicPath: '/dist/'
+		filename: 'demo/bundle.js'
 	},
 	module: {
 		loaders: [{ 
