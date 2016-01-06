@@ -10,6 +10,13 @@ var HomerReactScroller = React.createClass({
 			touchStart: 0
 		};
 	},
+	componentDidMount: function () {
+		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : this.getDOMNode();
+		var target = viewport.querySelector(this.props.scrollSelector);
+		if (this.props.setMaxHeight) {
+			viewport.style.height = target.scrollHeight + 'px';
+		}
+	},
 	scrollToBottom: function () {
 		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : this.getDOMNode();
 		var target = viewport.querySelector(this.props.scrollSelector);

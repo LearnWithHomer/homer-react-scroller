@@ -14,10 +14,12 @@
     "type": "git",
     "url": "https://github.com/LearnWithHomer/homer-react-scroller"
   },
-  "dependencies": {
-  	"react": "0.13.3",
+  "devDependencies": {
     "jsx-loader": "0.13.2",
     "webpack": "1.12.x",
     "webpack-dev-server": "1.12.x"
+  },
+  "peerDependencies": {
+    "react": "0.13.3"
   }
 }
