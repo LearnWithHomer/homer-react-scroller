@@ -1,10 +1,10 @@
 /** @jsx React.DOM */
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
 
 var HomerReactScroller = React.createClass({
-	getDefaultProps: function() {
+	defaultProps: function() {
 		return {
 			component: 'span',
 			touchStart: 0
