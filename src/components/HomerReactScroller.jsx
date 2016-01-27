@@ -27,7 +27,7 @@ var HomerReactScroller = React.createClass({
 		this._scroll(e);
 	},
 	_scroll: function (e) {
-		e.stopPropagation();
+		e.stopPropagation && e.stopPropagation();
 		var upDown = this.props.scrollDirection === 'y';
 		var margin = upDown ? 'marginTop' : 'marginLeft';
 		var viewport = e.currentTarget;
