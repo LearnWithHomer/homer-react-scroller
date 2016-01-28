@@ -58,7 +58,14 @@ var HomerReactScroller = React.createClass({
 	},
 	render: function () {
 		var el = React.createElement(this.props.component, this.props);
-		return React.cloneElement(el, {onWheel: this._scroll, onTouchStart: this._touchStart, onTouchEnd: this._touchEnd});
+		var events = {
+			onWheel: this._scroll
+		};
+		if (this.props.touchEvents === true) {
+			events.onTouchStart = this._touchStart;
+			events.onTouchEnd = this._touchEnd;
+		}
+		return React.cloneElement(el, events);
 	}
 });
 
