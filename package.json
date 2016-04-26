@@ -2,11 +2,11 @@
   "name": "homer-react-scroller",
   "version": "1.0.0",
   "description": "An NPM package for homer-react-scroller",
-  "main": "dist/index.js",
+  "main": "dist/homer-react-scroller.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config-dev.js",
-    "bundle": "webpack -p --config webpack.config-dist.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "NODE_ENV=production webpack",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --hot --inline"
   },
   "author": "Jordan Haven <jordan@homerapp.com> (https://learnwithhomer.com)",
   "private": true,
@@ -14,10 +14,13 @@
     "type": "git",
     "url": "https://github.com/LearnWithHomer/homer-react-scroller"
   },
+  "dependencies": {
+    "react": "15.0.1",
+    "react-dom": "15.0.0"
+  },
   "devDependencies": {
-    "react": "0.13.3",
     "jsx-loader": "0.13.2",
-    "webpack": "1.12.x",
-    "webpack-dev-server": "1.12.x"
+    "webpack": "1.12.14",
+    "webpack-dev-server": "1.14.1"
   }
 }

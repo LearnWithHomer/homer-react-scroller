@@ -2,6 +2,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var HomerReactScroller = React.createClass({
 	defaultProps: function() {
@@ -11,14 +12,14 @@ var HomerReactScroller = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : this.getDOMNode();
+		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : ReactDOM.findDOMNode(this);
 		var target = viewport.querySelector(this.props.scrollSelector);
 		if (this.props.setMaxHeight) {
 			viewport.style.height = target.scrollHeight + 'px';
 		}
 	},
 	scrollToBottom: function () {
-		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : this.getDOMNode();
+		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : ReactDOM.findDOMNode(this);
 		var target = viewport.querySelector(this.props.scrollSelector);
 		var e = {
 			currentTarget: viewport,
@@ -48,7 +49,7 @@ var HomerReactScroller = React.createClass({
 	},
 	_touchEnd: function (e) {
 		var upDown = this.props.scrollDirection === 'y';
-		var viewport = this.getDOMNode();
+		var viewport = ReactDOM.findDOMNode(this);
 		var end = e.nativeEvent.changedTouches[0][(upDown ? 'clientY' : 'clientX')];
 		var e = {
 			currentTarget: viewport,

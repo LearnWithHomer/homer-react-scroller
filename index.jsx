@@ -2,8 +2,9 @@
 
 'use strict';
 
-var React = require('react/addons');
-var HomerReactScroller = require('../src/index.js');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var HomerReactScroller = require('./src/index.js');
 
 var Demo = React.createClass({
 	render: function () {
@@ -56,4 +57,4 @@ var Demo = React.createClass({
 	}
 });
 
-React.render(<Demo />, document.getElementById('app'));
+ReactDOM.render(<Demo />, document.getElementById('app'));
