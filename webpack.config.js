@@ -20,8 +20,12 @@ module.exports = {
 	output: {
 		path: './dist',
 		filename: 'homer-react-scroller.js',
-		library: 'React',
+		library: 'HomerReactScroller',
 		libraryTarget: 'umd',
+	},
+	externals: {
+		'react': 'react',
+		'react-dom': 'react-dom'
 	},
 	devServer: {
 		contentBase: './',

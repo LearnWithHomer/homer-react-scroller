@@ -18,9 +18,12 @@
     "react": "15.0.1",
     "react-dom": "15.0.0"
   },
+  "peerDependencies": {
+    "react": "15.0.1"
+  },
   "devDependencies": {
     "jsx-loader": "0.13.2",
-    "webpack": "1.12.14",
+    "webpack": "1.13.0",
     "webpack-dev-server": "1.14.1"
   }
 }
