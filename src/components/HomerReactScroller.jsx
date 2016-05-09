@@ -47,7 +47,7 @@ var HomerReactScroller = React.createClass({
 			touchStart: (upDown ? touch.clientY : touch.clientX)
 		});
 	},
-	_touchEnd: function (e) {
+	_touchMove: function (e) {
 		var upDown = this.props.scrollDirection === 'y';
 		var viewport = ReactDOM.findDOMNode(this);
 		var end = e.nativeEvent.changedTouches[0][(upDown ? 'clientY' : 'clientX')];
@@ -64,7 +64,7 @@ var HomerReactScroller = React.createClass({
 		};
 		if (this.props.touchEvents === true) {
 			events.onTouchStart = this._touchStart;
-			events.onTouchEnd = this._touchEnd;
+			events.onTouchMove = this._touchMove;
 		}
 		return React.cloneElement(el, events);
 	}
