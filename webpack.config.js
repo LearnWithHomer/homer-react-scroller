@@ -8,11 +8,16 @@ var plugins = [
 	new webpack.optimize.OccurenceOrderPlugin(),
 ];
 var entry = './index.jsx';
+var externals = {};
 
 if (process.env.NODE_ENV === 'production') {
 	plugins.push(new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}));
 	plugins.push(new webpack.optimize.UglifyJsPlugin());
 	entry = './src/index.js';
+	externals = {
+		'react': 'react',
+		'react-dom': 'react-dom'
+	};
 }
 
 module.exports = {
@@ -23,10 +28,7 @@ module.exports = {
 		library: 'HomerReactScroller',
 		libraryTarget: 'umd',
 	},
-	externals: {
-		'react': 'react',
-		'react-dom': 'react-dom'
-	},
+	externals: externals,
 	devServer: {
 		contentBase: './',
 	},

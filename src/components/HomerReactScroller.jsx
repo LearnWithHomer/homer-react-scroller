@@ -37,6 +37,7 @@ var HomerReactScroller = React.createClass({
 			var maxScroll = upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
 			var currentScroll = parseInt(target.style[margin], 10) || 0;
 			var newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
+			maxScroll += this.props.overscroll || 0;
 			target.style[margin] = (Math.abs(newScroll) <= maxScroll ? newScroll : Math.min(-maxScroll, 0)) + 'px';
 		}
 	},
