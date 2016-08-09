@@ -15,12 +15,12 @@
     "url": "https://github.com/LearnWithHomer/homer-react-scroller"
   },
   "dependencies": {
-    "react": "15.0.1",
-    "react-dom": "15.0.0",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.0",
     "impetus": "0.8.3"
   },
   "peerDependencies": {
-    "react": "15.0.1"
+    "react": "^15.0.1"
   },
   "devDependencies": {
     "jsx-loader": "0.13.2",
