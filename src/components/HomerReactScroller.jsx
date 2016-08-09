@@ -72,11 +72,11 @@ var HomerReactScroller = React.createClass({
 		target.style[margin] = (Math.abs(newScroll) <= this.state.maxScroll ? newScroll : Math.min(-this.state.maxScroll, 0)) + 'px';
 	},
 	render: function () {
-		var el = React.createElement(this.props.component, {className: this.props.className});
-		var events = {
-			onWheel: this._scroll
+		var props = {
+			onWheel: this._scroll,
+			className: this.props.className
 		};
-		return React.cloneElement(el, events);
+		return React.createElement(this.props.component, props, this.props.children);
 	}
 });
 
