@@ -2,7 +2,7 @@
   "name": "homer-react-scroller",
   "version": "1.0.0",
   "description": "An NPM package for homer-react-scroller",
-  "main": "dist/homer-react-scroller.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "watch": "webpack --watch",
