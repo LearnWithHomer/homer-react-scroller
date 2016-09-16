@@ -1,83 +1,105 @@
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Impetus = require('impetus');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Impetus = require('impetus');
 
-var HomerReactScroller = React.createClass({
-	defaultProps: function() {
+const HomerReactScroller = React.createClass({
+	propTypes: {
+		viewportSelector: React.PropTypes.element,
+		className: React.PropTypes.string,
+		component: React.PropTypes.string,
+		children: React.PropTypes.object,
+		scrollDirection: React.PropTypes.string,
+		scrollSelector: React.PropTypes.string,
+		overscroll: React.PropTypes.number,
+		setMaxHeight: React.PropTypes.bool,
+	},
+	defaultProps: function defaultProps() {
 		return {
 			component: 'span',
-			touchStart: 0
+			touchStart: 0,
 		};
 	},
-	getInitialState: function () {
+	getInitialState: function getInitialState() {
 		return {
 			viewport: undefined,
 			target: undefined,
 			upDown: undefined,
 			impetus: undefined,
-			maxScroll: 0
+			maxScroll: 0,
 		};
 	},
-	componentDidMount: function () {
-		var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : ReactDOM.findDOMNode(this);
-		var target = viewport.querySelector(this.props.scrollSelector);
-		var upDown = this.props.scrollDirection === 'y';
-		var overscroll = this.props.overscroll || 0;
+	componentDidMount: function componentDidMount() {
+		const viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : ReactDOM.findDOMNode(this);
+		const target = viewport.querySelector(this.props.scrollSelector);
+		const upDown = this.props.scrollDirection === 'y';
+		const overscroll = this.props.overscroll || 0;
 		this.setState({
-			viewport: viewport,
-			target: target,
+			viewport,
+			target,
 			margin: upDown ? 'marginTop' : 'marginLeft',
-			upDown: upDown,
-			overscroll: overscroll
+			upDown,
+			overscroll,
 		});
-		setTimeout(this._setup, 500);
+		this.setup();
 	},
-	_setup: function () {
-		var self = this;
-		var viewport = this.state.viewport;
-		var target = this.state.target;
+	setup: function setup() {
+		const viewport = this.state.viewport;
+		const target = this.state.target;
+		if (!this.state.target) {
+			requestAnimationFrame(this.setup);
+			return;
+		}
+		if (!this.state.upDown) {
+			// we're going side to side, so force the width of the containing element to fit all elements
+			console.log(target);
+			let totalWidth = 0;
+			target.childNodes.forEach((element) => {
+				totalWidth += element.clientWidth;
+			});
+			target.style.width = `${totalWidth}px`;
+		}
 		if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
-			console.log(target.offsetHeight, viewport.offsetHeight)
-			var maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
-			var impetus = new Impetus({
+			const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
+			const impetus = new Impetus({
 				source: viewport,
-				update: self._momentum,
-				boundY: [-(maxScroll + self.state.overscroll), 0]
+				update: this.momentum,
+				boundY: [-(maxScroll + this.state.overscroll), 0],
 			});
-			if (self.props.setMaxHeight) {
-				viewport.style.height = target.scrollHeight + 'px';
+			if (this.props.setMaxHeight) {
+				viewport.style.height = `${target.scrollHeight}px`;
 			}
-			self.setState({
-				impetus: impetus,
-				maxScroll: maxScroll + self.state.overscroll
+			this.setState({
+				impetus,
+				maxScroll: maxScroll + this.state.overscroll,
 			});
-		} else {
-			window.requestAnimationFrame(this._setup);
 		}
 	},
-	scrollToBottom: function () {
-		this._scroll({deltaY: this.state.target.scrollHeight});
+	scrollToBottom: function scrollToBottom() {
+		this.scroll({
+			deltaY: this.state.target.scrollHeight,
+		});
 	},
-	_momentum: function (x, y) {
-		this.state.target.style[this.state.margin] = y + 'px';
+	momentum: function momentum(x, y) {
+		this.state.target.style[this.state.margin] = `${y}px`;
 	},
-	_scroll: function (e) {
+	scroll: function scroll(e) {
 		e.stopPropagation && e.stopPropagation();
-		var margin = this.state.margin;
-		var target = this.state.target;
-		var currentScroll = parseInt(target.style[margin], 10) || 0;
-		var newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
-		target.style[margin] = (Math.abs(newScroll) <= this.state.maxScroll ? newScroll : Math.min(-this.state.maxScroll, 0)) + 'px';
+		const margin = this.state.margin;
+		const target = this.state.target;
+		const currentScroll = parseInt(target.style[margin], 10) || 0;
+		const newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
+		const newMargin = Math.abs(newScroll) <= this.state.maxScroll ? newScroll : Math.min(-this.state.maxScroll, 0);
+		target.style[margin] = `${newMargin}px`;
 	},
-	render: function () {
-		var props = {
-			onWheel: this._scroll,
-			className: this.props.className
+	render: function render() {
+		const props = {
+			onWheel: this.scroll,
+			className: this.props.className,
 		};
 		return React.createElement(this.props.component, props, this.props.children);
-	}
+	},
 });
 
 module.exports = HomerReactScroller;

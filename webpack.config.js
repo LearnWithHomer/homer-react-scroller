@@ -12,7 +12,6 @@ var externals = {};
 
 if (process.env.NODE_ENV === 'production') {
 	plugins.push(new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}));
-	plugins.push(new webpack.optimize.UglifyJsPlugin());
 	entry = './src/index.js';
 	externals = {
 		'react': 'react',
@@ -33,13 +32,13 @@ module.exports = {
 		contentBase: './',
 	},
 	module: {
-		loaders: [
-			{
-				test: /.jsx?$/,
-				loader: 'jsx-loader',
-				exclude: /node_modules/,
-			}
-		]
+		test: /.jsx?$/,
+		loader: 'babel-loader',
+		exclude: '/node_modules/',
+		query: {
+			presets: ['es2015', 'es2015-loose', 'react'],
+			plugins: ['system-import-transformer'],
+		},
 	},
 	plugins: plugins
 };
