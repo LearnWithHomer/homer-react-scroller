@@ -549,7 +549,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 			if (!this.state.upDown) {
 				// we're going side to side, so force the width of the containing element to fit all elements
-				console.log(target);
 				let totalWidth = 0;
 				target.childNodes.forEach((element) => {
 					totalWidth += element.clientWidth;
