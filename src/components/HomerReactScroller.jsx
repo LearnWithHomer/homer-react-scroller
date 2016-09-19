@@ -44,6 +44,17 @@ const HomerReactScroller = React.createClass({
 		});
 		this.setup();
 	},
+	componentWillUnmount: function componentWillUnmount() {
+		window.removeEventListener('resize', this.setup, false);
+	},
+	setWidthForYScroll: function setWidthForYScroll() {
+		const target = this.state.target;
+		let totalWidth = 0;
+		target.childNodes.forEach((element) => {
+			totalWidth += element.clientWidth;
+		});
+		target.style.width = `${totalWidth}px`;
+	},
 	setup: function setup() {
 		const viewport = this.state.viewport;
 		const target = this.state.target;
@@ -53,11 +64,8 @@ const HomerReactScroller = React.createClass({
 		}
 		if (!this.state.upDown) {
 			// we're going side to side, so force the width of the containing element to fit all elements
-			let totalWidth = 0;
-			target.childNodes.forEach((element) => {
-				totalWidth += element.clientWidth;
-			});
-			target.style.width = `${totalWidth}px`;
+			this.setWidthForYScroll();
+			window.addEventListener('resize', this.setup, false);
 		}
 		if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
 			const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
