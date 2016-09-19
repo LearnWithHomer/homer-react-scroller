@@ -73,6 +73,7 @@ const HomerReactScroller = React.createClass({
 				source: viewport,
 				update: this.momentum,
 				boundY: [-(maxScroll + this.state.overscroll), 0],
+				boundX: [-(maxScroll + this.state.overscroll), 0],
 			});
 			if (this.props.setMaxHeight) {
 				viewport.style.height = `${target.scrollHeight}px`;
@@ -89,7 +90,8 @@ const HomerReactScroller = React.createClass({
 		});
 	},
 	momentum: function momentum(x, y) {
-		this.state.target.style[this.state.margin] = `${y}px`;
+		const delta = this.state.upDown ? y : x;
+		this.state.target.style[this.state.margin] = `${delta}px`;
 	},
 	scroll: function scroll(e) {
 		e.stopPropagation && e.stopPropagation();
