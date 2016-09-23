@@ -44,6 +44,11 @@ const HomerReactScroller = React.createClass({
 		});
 		this.setup();
 	},
+	componentDidUpdate: function componentDidUpdate(props) {
+		if (this.props.children.props.children.length !== props.children.props.children.length) {
+			this.setup();
+		}
+	},
 	componentWillUnmount: function componentWillUnmount() {
 		window.removeEventListener('resize', this.setup, false);
 	},
