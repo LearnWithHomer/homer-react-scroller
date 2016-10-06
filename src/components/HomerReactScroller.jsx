@@ -14,6 +14,7 @@ const HomerReactScroller = React.createClass({
 		scrollSelector: React.PropTypes.string,
 		overscroll: React.PropTypes.number,
 		setMaxHeight: React.PropTypes.bool,
+		update: React.PropTypes.bool,
 	},
 	defaultProps: function defaultProps() {
 		return {
@@ -45,7 +46,7 @@ const HomerReactScroller = React.createClass({
 		this.setup();
 	},
 	componentDidUpdate: function componentDidUpdate(props) {
-		if (this.props.children.props.children.length !== props.children.props.children.length) {
+		if (this.props.children.props.children.length !== props.children.props.children.length || this.props.update !== props.update) {
 			this.setup();
 		}
 	},
@@ -70,8 +71,8 @@ const HomerReactScroller = React.createClass({
 		if (!this.state.upDown) {
 			// we're going side to side, so force the width of the containing element to fit all elements
 			this.setWidthForYScroll();
-			window.addEventListener('resize', this.setup, false);
 		}
+		window.addEventListener('resize', this.setup, false);
 		if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
 			const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
 			const impetus = new Impetus({
