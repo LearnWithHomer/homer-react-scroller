@@ -9,7 +9,6 @@ const HomerReactScroller = React.createClass({
 		viewportSelector: React.PropTypes.element,
 		className: React.PropTypes.string,
 		component: React.PropTypes.string,
-		children: React.PropTypes.object,
 		scrollDirection: React.PropTypes.string,
 		scrollSelector: React.PropTypes.string,
 		overscroll: React.PropTypes.number,
@@ -46,7 +45,7 @@ const HomerReactScroller = React.createClass({
 		this.setup();
 	},
 	componentDidUpdate: function componentDidUpdate(props) {
-		if (this.props.children.props.children.length !== props.children.props.children.length || this.props.update !== props.update) {
+		if (this.props.children.props && this.props.children.props.children.length !== props.children.props.children.length || this.props.update !== props.update) {
 			this.setup();
 		}
 	},
