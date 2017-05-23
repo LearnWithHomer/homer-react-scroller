@@ -20,6 +20,7 @@ class HomerReactScroller extends React.Component {
     this.maxScroll = 0;
     this.targetHeight = 0;
 
+    this.momentum = this.momentum.bind(this);
     this.setup = this.setup.bind(this);
     this.scroll = this.scroll.bind(this);
   }
