@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const Impetus = require('impetus');
 const { isEqual } = require('lodash');
 
 class HomerReactScroller extends React.Component {
@@ -20,7 +19,6 @@ class HomerReactScroller extends React.Component {
     this.maxScroll = 0;
     this.targetHeight = 0;
 
-    this.momentum = this.momentum.bind(this);
     this.setup = this.setup.bind(this);
     this.scroll = this.scroll.bind(this);
   }
@@ -80,12 +78,7 @@ class HomerReactScroller extends React.Component {
 
     if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
       const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
-      const impetus = new Impetus({
-        source: viewport,
-        update: this.momentum,
-        boundY: [-(maxScroll + this.state.overscroll), 0],
-        boundX: [-(maxScroll + this.state.overscroll), 0],
-      });
+
       if (this.props.setMaxHeight) {
         viewport.style.height = `${target.scrollHeight}px`;
       }
@@ -98,11 +91,6 @@ class HomerReactScroller extends React.Component {
     this.scroll({
       deltaY: this.state.target.scrollHeight,
     });
-  }
-
-  momentum(x, y) {
-    const delta = this.state.upDown ? y : x;
-    this.state.target.style[this.state.margin] = `${delta}px`;
   }
 
   scroll(e) {
