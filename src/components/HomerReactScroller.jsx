@@ -114,9 +114,6 @@ class HomerReactScroller extends React.Component {
     e.stopPropagation && e.stopPropagation();
     const margin = this.state.margin;
     const target = this.state.target;
-    if (target.offsetHeight !== this.targetHeight) {
-      this.calculateMaxScroll();
-    }
     const currentScroll = parseInt(target.style[margin], 10) || 0;
     const newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
     const newMargin = Math.abs(newScroll) <= this.maxScroll ? newScroll : Math.min(-this.maxScroll, 0);
