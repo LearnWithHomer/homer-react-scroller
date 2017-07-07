@@ -103,7 +103,11 @@ class HomerReactScroller extends React.Component {
 
   momentum(x, y) {
     const delta = this.state.upDown ? y : x;
-    //this.state.target.style[this.state.margin] = `${delta}px`;
+    const isMobile = navigator.userAgent.match(/Android|iPhone|iPad/i);
+
+    if (isMobile) {
+      this.state.target.style[this.state.margin] = `${delta}px`;
+    }
   }
 
   scroll(e) {
