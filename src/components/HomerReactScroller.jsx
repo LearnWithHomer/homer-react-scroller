@@ -82,7 +82,7 @@ class HomerReactScroller extends React.Component {
       const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
       const impetus = new Impetus({
         source: viewport,
-        //update: this.momentum,
+        update: this.momentum,
         boundY: [-(maxScroll + this.state.overscroll), 0],
         boundX: [-(maxScroll + this.state.overscroll), 0],
       });
