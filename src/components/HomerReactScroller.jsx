@@ -39,6 +39,9 @@ class HomerReactScroller extends React.Component {
     });
     window.addEventListener('resize', this.setup, false);
     window.addEventListener('load', this.setup, false);
+    if (this.isMobile()) {
+      window.addEventListener('orientationchange', this.calculateMaxScroll);
+    }
   }
 
   componentDidUpdate(props) {
@@ -101,10 +104,16 @@ class HomerReactScroller extends React.Component {
     });
   }
 
+  isMobile() {
+    return navigator.userAgent.match(/Android|iPhone|iPad/i);
+  }
+
   momentum(x, y) {
     const delta = this.state.upDown ? y : x;
 
-    this.state.target.style[this.state.margin] = `${Math.floor(delta)}px`;
+    if (this.isMobile()) {
+      this.state.target.style[this.state.margin] = `${delta}px`;
+    }
   }
 
   scroll(e) {
