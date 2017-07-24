@@ -114,7 +114,7 @@ class HomerReactScroller extends React.Component {
       const delta = this.state.upDown ? y : x;
       const deltaRounded = Math.floor(delta);
 
-      this.state.target.style[this.state.margin] = `${Math.floor(delta)}px`;
+      this.state.target.style[this.state.margin] = `${Math.floor(deltaRounded)}px`;
     }
   }
 
