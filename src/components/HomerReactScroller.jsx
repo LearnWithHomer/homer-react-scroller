@@ -19,7 +19,6 @@ class HomerReactScroller extends React.Component {
 
     this.maxScroll = 0;
     this.targetHeight = 0;
-    this.lastValue = 0;
 
     this.momentum = this.momentum.bind(this);
     this.setup = this.setup.bind(this);
@@ -115,10 +114,7 @@ class HomerReactScroller extends React.Component {
       const delta = this.state.upDown ? y : x;
       const deltaRounded = Math.floor(delta);
 
-      if (deltaRounded < -100 ||  Math.abs(deltaRounded - this.lastValue < 100)) {
-        this.lastValue  = deltaRounded
-        this.state.target.style[this.state.margin] = `${Math.floor(delta)}px`;
-      }
+      this.state.target.style[this.state.margin] = `${Math.floor(delta)}px`;
     }
   }
 
