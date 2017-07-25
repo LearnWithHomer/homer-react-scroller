@@ -109,8 +109,7 @@ class HomerReactScroller extends React.Component {
   }
 
   momentum(x, y) {
-    if (this.isMobile()) {
-
+    if (this.isMobile() && this.props.impetusEnabled) {
       const delta = this.state.upDown ? y : x;
       const deltaRounded = Math.floor(delta);
 
@@ -147,11 +146,13 @@ HomerReactScroller.propTypes = {
   overscroll: PropTypes.number,
   setMaxHeight: PropTypes.bool,
   update: PropTypes.bool,
+  impetusEnabled: PropTypes.bool,
 }
 
 HomerReactScroller.defaultProps = {
   component: 'span',
   touchStart: 0,
+  impetusEnabled: true,
 }
 
 module.exports = HomerReactScroller;
