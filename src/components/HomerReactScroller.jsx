@@ -83,12 +83,14 @@ class HomerReactScroller extends React.Component {
 
     if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
       const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
-      const impetus = new Impetus({
-        source: viewport,
-        update: this.momentum,
-        boundY: [-(maxScroll + this.state.overscroll), 0],
-        boundX: [-(maxScroll + this.state.overscroll), 0],
-      });
+      if (this.props.impetusEnabled) {
+        const impetus = new Impetus({
+          source: viewport,
+          update: this.momentum,
+          boundY: [-(maxScroll + this.state.overscroll), 0],
+          boundX: [-(maxScroll + this.state.overscroll), 0],
+        });
+      }
 
       if (this.props.setMaxHeight) {
         viewport.style.height = `${target.scrollHeight}px`;
@@ -109,7 +111,7 @@ class HomerReactScroller extends React.Component {
   }
 
   momentum(x, y) {
-    if (this.isMobile() && this.props.impetusEnabled) {
+    if (this.isMobile()) {
       const delta = this.state.upDown ? y : x;
       const deltaRounded = Math.floor(delta);
 
