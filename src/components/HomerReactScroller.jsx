@@ -84,6 +84,11 @@ class HomerReactScroller extends React.Component {
   }
 
   calculateMaxScroll() {
+    if (!this.state || !this.state.viewport || !this.state.target) {
+      console.warn("HomerReactScroller.calculateMaxScroll(): state isn't ready yet, skipping.");
+      return;
+    }
+    
     const viewport = this.state.viewport;
     const target = this.state.target;
 
