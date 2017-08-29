@@ -23,6 +23,7 @@ class HomerReactScroller extends React.Component {
     this.momentum = this.momentum.bind(this);
     this.setup = this.setup.bind(this);
     this.scroll = this.scroll.bind(this);
+    this.calculateMaxScroll = this.calculateMaxScroll.bind(this);
   }
 
   componentDidMount() {
@@ -36,12 +37,14 @@ class HomerReactScroller extends React.Component {
       margin: upDown ? 'marginTop' : 'marginLeft',
       upDown,
       overscroll,
+    }, () => {
+      // once state has been updated, then add event listeners
+      window.addEventListener('resize', this.setup, false);
+      window.addEventListener('load', this.setup, false);
+      if (this.isMobile()) {
+        window.addEventListener('orientationchange', this.calculateMaxScroll);
+      }
     });
-    window.addEventListener('resize', this.setup, false);
-    window.addEventListener('load', this.setup, false);
-    if (this.isMobile()) {
-      window.addEventListener('orientationchange', this.calculateMaxScroll);
-    }
   }
 
   componentDidUpdate(props) {
@@ -53,6 +56,9 @@ class HomerReactScroller extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.setup, false);
     window.removeEventListener('load', this.setup, false);
+    if (this.isMobile()) {
+      window.removeEventListener('orientationchange', this.calculateMaxScroll, false);
+    }
   }
 
   setWidthForYScroll() {
