@@ -32,13 +32,17 @@ module.exports = {
 		contentBase: './',
 	},
 	module: {
-		test: /.jsx?$/,
-		loader: 'babel-loader',
-		exclude: '/node_modules/',
-		query: {
-			presets: ['es2015', 'es2015-loose', 'react'],
-			plugins: ['system-import-transformer'],
-		},
+		loaders: [
+			{
+				test: /\.jsx?$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				query: {
+					presets: ['es2015', 'es2015-loose', 'react'],
+					plugins: ['system-import-transformer'],
+				}
+			}
+		]
 	},
 	plugins: plugins
 };

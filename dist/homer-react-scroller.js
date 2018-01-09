@@ -56,12 +56,145 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	const HomerReactScroller = __webpack_require__(4);
+	var HomerReactScroller = __webpack_require__(1);
 
 	module.exports = HomerReactScroller;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(5);
+	var ReactDOM = __webpack_require__(6);
+	var Impetus = __webpack_require__(2);
+
+	var _require = __webpack_require__(3),
+	    isEqual = _require.isEqual;
+
+	var HomerReactScroller = React.createClass({
+		displayName: 'HomerReactScroller',
+
+		propTypes: {
+			viewportSelector: React.PropTypes.element,
+			className: React.PropTypes.string,
+			component: React.PropTypes.string,
+			scrollDirection: React.PropTypes.string,
+			scrollSelector: React.PropTypes.string,
+			overscroll: React.PropTypes.number,
+			setMaxHeight: React.PropTypes.bool,
+			update: React.PropTypes.bool
+		},
+		defaultProps: function defaultProps() {
+			return {
+				component: 'span',
+				touchStart: 0
+			};
+		},
+		getInitialState: function getInitialState() {
+			return {
+				viewport: undefined,
+				target: undefined,
+				upDown: undefined,
+				impetus: undefined,
+				maxScroll: 0
+			};
+		},
+		componentDidMount: function componentDidMount() {
+			var viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : ReactDOM.findDOMNode(this);
+			var target = viewport.querySelector(this.props.scrollSelector);
+			var upDown = this.props.scrollDirection === 'y';
+			var overscroll = this.props.overscroll || 0;
+			this.setState({
+				viewport: viewport,
+				target: target,
+				margin: upDown ? 'marginTop' : 'marginLeft',
+				upDown: upDown,
+				overscroll: overscroll
+			});
+			this.setup();
+			window.addEventListener('resize', this.setup, false);
+			window.addEventListener('load', this.setup, false);
+		},
+		componentDidUpdate: function componentDidUpdate(props) {
+			if (!isEqual(this.props, props)) {
+				this.setup();
+			}
+		},
+		componentWillUnmount: function componentWillUnmount() {
+			window.removeEventListener('resize', this.setup, false);
+			window.removeEventListener('load', this.setup, false);
+		},
+		setWidthForYScroll: function setWidthForYScroll() {
+			var target = this.state.target;
+			var totalWidth = 0;
+			target.childNodes.forEach(function (element) {
+				totalWidth += element.clientWidth;
+			});
+			target.style.width = totalWidth + 'px';
+		},
+		setup: function setup() {
+			var viewport = this.state.viewport;
+			var target = this.state.target;
+
+			if (!this.state.target) {
+				requestAnimationFrame(this.setup);
+				return;
+			}
+			if (!this.state.upDown) {
+				// we're going side to side, so force the width of the containing element to fit all elements
+				this.setWidthForYScroll();
+			}
+			if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
+				var maxScroll = this.state.upDown ? target.offsetHeight - viewport.offsetHeight : target.offsetWidth - viewport.offsetWidth;
+				var impetus = new Impetus({
+					source: viewport,
+					update: this.momentum,
+					boundY: [-(maxScroll + this.state.overscroll), 0],
+					boundX: [-(maxScroll + this.state.overscroll), 0]
+				});
+				if (this.props.setMaxHeight) {
+					viewport.style.height = target.scrollHeight + 'px';
+				}
+				this.setState({
+					impetus: impetus,
+					maxScroll: maxScroll + this.state.overscroll
+				});
+			}
+		},
+		scrollToBottom: function scrollToBottom() {
+			this.scroll({
+				deltaY: this.state.target.scrollHeight
+			});
+		},
+		momentum: function momentum(x, y) {
+			var delta = this.state.upDown ? y : x;
+			this.state.target.style[this.state.margin] = delta + 'px';
+		},
+		scroll: function scroll(e) {
+			e.stopPropagation && e.stopPropagation();
+			var margin = this.state.margin;
+			var target = this.state.target;
+			var currentScroll = parseInt(target.style[margin], 10) || 0;
+			var newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
+			var newMargin = Math.abs(newScroll) <= this.state.maxScroll ? newScroll : Math.min(-this.state.maxScroll, 0);
+			target.style[margin] = newMargin + 'px';
+		},
+		render: function render() {
+			var props = {
+				onWheel: this.scroll,
+				className: this.props.className
+			};
+			var el = React.createElement(this.props.component, props, this.props.children);
+			return el;
+		}
+	});
+
+	module.exports = HomerReactScroller;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
@@ -550,7 +683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -17638,10 +17771,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(3)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)(module)))
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 	module.exports = function(module) {
@@ -17655,135 +17788,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		return module;
 	}
 
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	const React = __webpack_require__(5);
-	const ReactDOM = __webpack_require__(6);
-	const Impetus = __webpack_require__(1);
-	const { isEqual } = __webpack_require__(2);
-
-	const HomerReactScroller = React.createClass({
-		propTypes: {
-			viewportSelector: React.PropTypes.element,
-			className: React.PropTypes.string,
-			component: React.PropTypes.string,
-			scrollDirection: React.PropTypes.string,
-			scrollSelector: React.PropTypes.string,
-			overscroll: React.PropTypes.number,
-			setMaxHeight: React.PropTypes.bool,
-			update: React.PropTypes.bool,
-		},
-		defaultProps: function defaultProps() {
-			return {
-				component: 'span',
-				touchStart: 0,
-			};
-		},
-		getInitialState: function getInitialState() {
-			return {
-				viewport: undefined,
-				target: undefined,
-				upDown: undefined,
-				impetus: undefined,
-				maxScroll: 0,
-			};
-		},
-		componentDidMount: function componentDidMount() {
-			const viewport = this.props.viewportSelector ? document.querySelector(this.props.viewportSelector) : ReactDOM.findDOMNode(this);
-			const target = viewport.querySelector(this.props.scrollSelector);
-			const upDown = this.props.scrollDirection === 'y';
-			const overscroll = this.props.overscroll || 0;
-			this.setState({
-				viewport,
-				target,
-				margin: upDown ? 'marginTop' : 'marginLeft',
-				upDown,
-				overscroll,
-			});
-			this.setup();
-			window.addEventListener('resize', this.setup, false);
-			window.addEventListener('load', this.setup, false);
-		},
-		componentDidUpdate: function componentDidUpdate(props) {
-			if (!isEqual(this.props, props)) {
-				this.setup();
-			}
-		},
-		componentWillUnmount: function componentWillUnmount() {
-			window.removeEventListener('resize', this.setup, false);
-			window.removeEventListener('load', this.setup, false);
-		},
-		setWidthForYScroll: function setWidthForYScroll() {
-			const target = this.state.target;
-			let totalWidth = 0;
-			target.childNodes.forEach((element) => {
-				totalWidth += element.clientWidth;
-			});
-			target.style.width = `${totalWidth}px`;
-		},
-		setup: function setup() {
-			const viewport = this.state.viewport;
-			const target = this.state.target;
-			
-			if (!this.state.target) {
-				requestAnimationFrame(this.setup);
-				return;
-			}
-			if (!this.state.upDown) {
-				// we're going side to side, so force the width of the containing element to fit all elements
-				this.setWidthForYScroll();
-			}
-			if (target.offsetHeight > viewport.offsetHeight || target.offsetWidth > viewport.offsetWidth) {
-				const maxScroll = this.state.upDown ? (target.offsetHeight - viewport.offsetHeight) : (target.offsetWidth - viewport.offsetWidth);
-				const impetus = new Impetus({
-					source: viewport,
-					update: this.momentum,
-					boundY: [-(maxScroll + this.state.overscroll), 0],
-					boundX: [-(maxScroll + this.state.overscroll), 0],
-				});
-				if (this.props.setMaxHeight) {
-					viewport.style.height = `${target.scrollHeight}px`;
-				}
-				this.setState({
-					impetus,
-					maxScroll: maxScroll + this.state.overscroll,
-				});
-			}
-		},
-		scrollToBottom: function scrollToBottom() {
-			this.scroll({
-				deltaY: this.state.target.scrollHeight,
-			});
-		},
-		momentum: function momentum(x, y) {
-			const delta = this.state.upDown ? y : x;
-			this.state.target.style[this.state.margin] = `${delta}px`;
-		},
-		scroll: function scroll(e) {
-			e.stopPropagation && e.stopPropagation();
-			const margin = this.state.margin;
-			const target = this.state.target;
-			const currentScroll = parseInt(target.style[margin], 10) || 0;
-			const newScroll = Math.min(0, Math.floor(currentScroll - e.deltaY));
-			const newMargin = Math.abs(newScroll) <= this.state.maxScroll ? newScroll : Math.min(-this.state.maxScroll, 0);
-			target.style[margin] = `${newMargin}px`;
-		},
-		render: function render() {
-			const props = {
-				onWheel: this.scroll,
-				className: this.props.className,
-			};
-			const el = React.createElement(this.props.component, props, this.props.children);
-			return el;
-		},
-	});
-
-	module.exports = HomerReactScroller;
 
 /***/ }),
 /* 5 */
