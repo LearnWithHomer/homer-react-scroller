@@ -3,9 +3,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import isEqual from 'lodash.isequal';
 const Impetus = require('impetus');
-const { isEqual } = require('lodash');
 
 class HomerReactScroller extends React.Component {
   constructor(props) {
@@ -168,4 +167,4 @@ HomerReactScroller.defaultProps = {
   impetusEnabled: true,
 }
 
-module.exports = HomerReactScroller;
+export default HomerReactScroller;
