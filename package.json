@@ -9,10 +9,12 @@
     "start": "yarn install && webpack-dev-server --hot --inline"
   },
   "author": "Jordan Haven <jordan@homerapp.com> (https://learnwithhomer.com)",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/LearnWithHomer/homer-react-scroller"
+  },
+  "publishConfig": {
+    "registry": "http://verdaccio.learnwithhomer.com:4873"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
