@@ -25,7 +25,7 @@
     "impetus": "^0.8.3",
     "lodash.isequal": "^4.5.0",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.4.2"
   },
   "devDependencies": {
     "webpack": "^3.5.2",
